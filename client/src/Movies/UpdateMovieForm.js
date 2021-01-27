@@ -3,15 +3,15 @@ import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 const initialFormValues = {
-  id:0,
-  title: "",
-  director: "",
-  metascore: "",
-  stars:[]
+  title:"",
+  director:"",
+  metascore:""
 }
 
 const UpdateMovieForm = props => {
-  const [ formValues, setFormValues ] = useState(initialFormValues)
+  const { movieList, setMovieList } = props;
+
+  const [ formValues, setFormValues ] = useState(initialFormValues);
   const { id } = useParams();
   const history = useHistory();
 
@@ -20,14 +20,14 @@ const UpdateMovieForm = props => {
     axios
     .put(`http://localhost:5000/api/movies/${id}`, formValues)
     .then(res => {
-      props.setMovieList(res.data)
-      history.push('/movies')
-      console.log(res)
+      setMovieList([...movieList,res.data])
+      history.push('/')
     })
     .catch(err => {
       console.log(err);
     })
   }
+
 
   const handleChange = e => {
     setFormValues({
@@ -71,17 +71,6 @@ const UpdateMovieForm = props => {
             placeholder="Enter Metascore"
             onChange={handleChange}
             value={formValues.metascore}
-            />
-          </label>
-          <br/>
-          <label className="formLabel">Star: 
-            <input
-            className="formInput"
-            type="text"
-            name="stars"
-            placeholder="Enter Star"
-            onChange={handleChange}
-            value={formValues.stars}
             />
           </label>
           <br/>
