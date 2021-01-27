@@ -29,14 +29,17 @@ const App = () => {
     <>
       <SavedList list={savedList} />
       <Route exact path="/">
-        <MovieList movies={movieList} />
+        <MovieList movies={movieList}/>
       </Route>
       <Route path="/movies/:id">
         <Movie addToSavedList={addToSavedList} />
       </Route>
       <Route
       path="/update-movie/:id"
-      render={props=> <UpdateMovieForm {...props } setMovieList={setMovieList}/>}
+      render={props=> <UpdateMovieForm
+        {...props }
+        setMovieList={setMovieList}
+        />}
       />
     </>
   );
