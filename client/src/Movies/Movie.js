@@ -32,8 +32,6 @@ function Movie({ addToSavedList, setMovieList }) {
     axios
     .delete(`http://localhost:5000/api/movies/${id}`)
     .then(res => {
-      console.log('success')
-      setMovieList(JSON.parse(res.data))
       history.push('/')
     })
     .catch(err => {

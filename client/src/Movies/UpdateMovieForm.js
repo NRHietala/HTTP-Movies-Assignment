@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
@@ -15,19 +15,29 @@ const UpdateMovieForm = props => {
   const { id } = useParams();
   const history = useHistory();
 
+  useEffect(() => {
+    axios
+        .get(`http://localhost:5000/api/movies/${id}`)
+        .then(res => {
+            setFormValues(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}, []);
+
   const handleSubmit = e => {
     e.preventDefault();
     axios
-    .put(`http://localhost:5000/api/movies/${id}`, formValues)
-    .then(res => {
-      setMovieList([...movieList,res.data])
-      history.push('/')
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }
-
+        .put(`http://localhost:5000/api/movies/${id}`, formValues)
+        .then(res => {
+            setMovieList([...movieList, res.data]);
+            history.push('/');
+        })
+        .catch(err => {
+          console.log(err)
+        });
+}
 
   const handleChange = e => {
     setFormValues({
@@ -35,8 +45,6 @@ const UpdateMovieForm = props => {
       [e.target.name] : e.target.value
     })
   }
-
-  console.log(props)
 
   return (
     <div>
