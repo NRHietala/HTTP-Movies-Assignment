@@ -1,43 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 const initialFormValues = {
+  // id: Date.now(),
   title:"",
   director:"",
-  metascore:""
+  metascore:"",
+  // stars:[]
 }
 
-const UpdateMovieForm = props => {
+const AddMovie = props => {
   const { movieList, setMovieList } = props;
 
   const [ formValues, setFormValues ] = useState(initialFormValues);
-  const { id } = useParams();
-  const history = useHistory();
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/movies/${id}`)
-      .then(res => {
-          setFormValues(res.data);
-      })
-      .catch(err => {
-          console.log(err);
-      });
-  }, []); 
 
   const handleSubmit = e => {
     e.preventDefault();
     axios
-        .put(`http://localhost:5000/api/movies/${id}`, formValues)
-        .then(res => {
-            setMovieList([...movieList, res.data]);
-            history.push('/');
-        })
-        .catch(err => {
-          console.log(err)
-        });
-}
+      .post(`http://localhost:5000/api/movies`, JSON.stringify(formValues))
+      .then(res => {
+        setMovieList([...movieList, res.data]);
+      })
+      .catch(err => {
+        console.log(err)
+      });
+  }
 
   const handleChange = e => {
     setFormValues({
@@ -45,6 +32,7 @@ const UpdateMovieForm = props => {
       [e.target.name] : e.target.value
     })
   }
+
 
   return (
     <div>
@@ -82,10 +70,10 @@ const UpdateMovieForm = props => {
             />
           </label>
           <br/>
-          <button>Update Movie Data!</button>
+          <button>Add a Movie!</button>
       </form>
     </div>
   )
 }
 
-export default UpdateMovieForm;
+export default AddMovie
