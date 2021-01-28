@@ -3,15 +3,15 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 const initialFormValues = {
-  // id: Date.now(),
+  id: Date.now(),
   title:"",
   director:"",
   metascore:"",
-  // stars:[]
+  stars:[]
 }
 
 const AddMovie = props => {
-  const { movieList, setMovieList } = props;
+  const { setMovieList } = props;
 
   const [ formValues, setFormValues ] = useState(initialFormValues);
 
@@ -20,11 +20,13 @@ const AddMovie = props => {
   const handleSubmit = e => {
     e.preventDefault();
     axios
-      .post(`http://localhost:5000/api/movies`, JSON.stringify(formValues))
+      .post(`http://localhost:5000/api/movies`, formValues)
       .then(res => {
-        console.log(res)
-        setMovieList(res.data, JSON.parse(formValues));
+        console.log(res.data)
+        setMovieList(res.data);
+        setFormValues(initialFormValues)
         history.push('/')
+        
 
       })
       .catch(err => {
